@@ -12,12 +12,15 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import objetosMapa.Hilo;
+import objetosMapa.Pelota;
 import observer.AlarmaColisionPocima;
-import pocima.Pocima;
+import objetosMapa.Pocima;
 import state.EstadoPersonaje;
 import state.Herido;
 import state.Moribundo;
@@ -39,14 +42,13 @@ public class recreacion extends JPanel {
     /*******************************************************************************************/
     EvaluarColisiones evaluarColisiones = new EvaluarColisiones();
     Pocima pocima = new Pocima();
-    JFrame ventana = new JFrame();
     Font fuenteVida = new Font("Calibri", 3, 16);// Fuente vida
     Font fuenteEscudo = new Font("Calibri", 3, 16);// Fuente escudo
     static ArrayList<Personaje> personajetemp = new ArrayList<>();
     static ArrayList<Object> arreglo_personajes = new ArrayList<>();
     private final int AnchoVentana = 900;
     private final int AltoVentana = 700;
-    Thread hilo;
+    //Thread hilo;
     boolean inicio = false;
     BufferedImage bi;
     Image img, fondo, pocion;
@@ -70,20 +72,19 @@ public class recreacion extends JPanel {
     boolean colisionPocima = false;
     Rectangle rect = new Rectangle(700, 500, 30, 20);
     Rectangle rectPj = new Rectangle(340, 230, 52, 80);
-
+    Pelota pelota = new Pelota(0,0);
+    Pelota pelotaUno = new Pelota(10,600);
+    Pelota pelotaDos = new Pelota(300,10);
+    Pelota pelotaTres = new Pelota(600,10);
+    Pelota pelotaCuatro = new Pelota(10,320);
     boolean entra = true;
 
     public recreacion() {
         fondo = h.getImage(this.getClass().getResource("/assets/map.png"));
         pocion = h.getImage(this.getClass().getResource(pocima.getImagen()));
-        ventana.setSize(AnchoVentana, AltoVentana);
-        ventana.setResizable(false);
-        ventana.setLocationRelativeTo(null);
-        ventana.setTitle("Recreación");
-        ventana.setVisible(true);
-        ventana.getContentPane().add(this);
+        
         bi = new BufferedImage(AnchoVentana, AltoVentana, BufferedImage.TYPE_INT_RGB);
-        img = h.getImage(this.getClass().getResource(personaje.getDerecha()));
+        //img = h.getImage(this.getClass().getResource(personaje.getDerecha()));
         inicio = true;
         addKeyListener(new KeyAdapter() {
             @Override
@@ -204,7 +205,6 @@ public class recreacion extends JPanel {
         });
         setFocusable(true);
     }
-
     @Override
     public void paint(Graphics g) {
         g.drawImage(bi, 0, 0, null);
@@ -215,7 +215,9 @@ public class recreacion extends JPanel {
         g2d = bi.createGraphics();
         g2d.drawImage(fondo, 0, 0, AnchoVentana, AltoVentana, this);
         g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
-       
+        g2d.setColor(Color.red);
+        dibujar(g2d);
+        actualizar();
         if (1 == arreglo_personajes.size()) {
             aumentoSpriteY = 0;
         } else {
@@ -270,15 +272,13 @@ public class recreacion extends JPanel {
                 rect.setRect(pocima.getCoordenadaX()+13, pocima.getCoordenadaY()+23, 30, 20);
                 /*Se evalua la colision de cada personaje mediante la clase EvaluarColisiones
                 y si es el caso se decora el personaje*/
-                colision = evaluarColisiones.evaluarColisionPocima(rect,rectPj,pocima);
+                colision = evaluarColisiones.evaluarColisionPocima(rect,rectPj,pocima, aumentoPorPocima, personajetemp.get(i));
                 if (colision == true) {
-                    //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
-                    aumentoPorPocima.operacion(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
+                    
                     if (entra == true) {
                         personaje = evaluarColisiones.personajeDecorado(personaje);
                     }
                     entra = false;
-                    //colisionPocima = true;
                 }
                 
             }
@@ -293,7 +293,23 @@ public class recreacion extends JPanel {
         personajetemp.clear();
         repaint();
     }
-
+    public void dibujar(Graphics2D g){
+        g.fill(pelota.getPelota());
+        g.fill(pelotaUno.getPelota());
+        g.fill(pelotaDos.getPelota());
+        g.fill(pelotaTres.getPelota());
+        g.fill(pelotaCuatro.getPelota());
+    }
+    public void actualizar(){
+        pelota.mover(getBounds(),colision(rectPj, pelota));
+        pelotaUno.mover(getBounds(),colision(rectPj, pelotaUno));
+        pelotaDos.mover(getBounds(),colision(rectPj, pelotaDos));
+        pelotaTres.mover(getBounds(),colision(rectPj, pelotaTres));
+        pelotaCuatro.mover(getBounds(),colision(rectPj, pelotaCuatro));
+    }
+    private boolean colision(Rectangle2D r, Pelota pelota){
+        return pelota.getPelota().intersects(r);
+    }
     public static void inicia() {
         arreglo_personajes.clear();
         personajetemp.clear();
@@ -320,7 +336,7 @@ public class recreacion extends JPanel {
             arreglo_personajes.add(personajeClonUno);
             arreglo_personajes.add(personajeClonDos);
         }
-        personaje.setVida(0);
+        
         new recreacion().setVisible(true);
     }
 }

@@ -1,6 +1,7 @@
 package gui;
 
 import fabricas.*;
+import javax.swing.JFrame;
 import productos.*;
 
 public class gui extends javax.swing.JFrame {
@@ -170,6 +171,9 @@ public class gui extends javax.swing.JFrame {
     }
     
     private void botonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearActionPerformed
+        Ventana ventana  = new Ventana();
+        ventana.setVisible(true);
+        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recreacion.eleccion = this.seleccion;
         recreacion.poblacion = this.cantidadPersonajes;
         recreacion.inicia();

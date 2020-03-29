@@ -1,4 +1,4 @@
-package pocima;
+package objetosMapa;
 
 import observer.colisionPocima;
 

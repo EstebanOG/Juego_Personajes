@@ -1,6 +1,7 @@
 package colisiones;
 
 import animacion.Personaje;
+import chainOfResponsability.Verificar;
 import decorator.ElfoDecorator;
 import decorator.EnanoDecorator;
 import decorator.HumanoDecorator;
@@ -8,25 +9,31 @@ import decorator.OrcoDecorator;
 import static gui.recreacion.eleccion;
 import java.awt.Rectangle;
 import observer.AlarmaColisionPocima;
-import pocima.Pocima;
+import objetosMapa.Pocima;
 
 public class EvaluarColisiones {
     public Rectangle rect;
     public Rectangle rectPj;
     public boolean colision;
     public Personaje personaje;
+    public Verificar verificar;
 
     public EvaluarColisiones() {
     }
 
-    public boolean evaluarColisionPocima(Rectangle rect, Rectangle rectPj,  Pocima pocima){
+    public boolean evaluarColisionPocima(Rectangle rect, Rectangle rectPj,  Pocima pocima, Verificar aumentoPorPocima, Personaje personaje){
         colision = rect.intersects(rectPj);
         if(colision == true){
+            //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
+            aumentoPorPocima.operacion(personaje.getVida(), personaje.getEscudo(), personaje);
             AlarmaColisionPocima a = new AlarmaColisionPocima();
             a.attach(pocima);
             a.notifyObserver();
         }
         return colision;
+    }
+    public void evaluarColisionBolas(){
+        
     }
     
     public Personaje personajeDecorado(Personaje personaje){

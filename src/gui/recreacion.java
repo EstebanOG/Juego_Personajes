@@ -50,7 +50,8 @@ public class recreacion extends JPanel {
     Font fuenteEscudo = new Font("Calibri", 3, 16);// Fuente escudo
     Font fuentePuntaje = new Font("Arial", 3, 19);//Fuente puntaje
     static ArrayList<Personaje> personajetemp = new ArrayList<>();
-    static ArrayList<Object> arreglo_personajes = new ArrayList<>();
+    static ArrayList<Personaje> arreglo_personajes = new ArrayList<>();
+    static ArrayList<Rectangle> rectanguloPersonajes = new ArrayList<>();
     private final int AnchoVentana = 900;
     private final int AltoVentana = 700;
     //Thread hilo;
@@ -76,7 +77,8 @@ public class recreacion extends JPanel {
     boolean colision = false;
     boolean colisionPocima = false;
     Rectangle rect = new Rectangle(700, 500, 30, 20);
-    Rectangle rectPj = new Rectangle(340, 230, 52, 80);
+    static Rectangle rectPj = new Rectangle(340, 230, 52, 80);
+    static Rectangle rectPjDos = new Rectangle(340,320,50,80); 
     Rectangle rectCofre = new Rectangle(0, 300, 60, 60);
     Bola pelota = new Bola(0,0);
     Bola pelotaUno = new Bola(10,600);
@@ -92,8 +94,8 @@ public class recreacion extends JPanel {
     public recreacion() {
         fondo = h.getImage(this.getClass().getResource("/assets/map.png"));
         pocion = h.getImage(this.getClass().getResource(pocima.getImagen()));
-        bolaFuego = h.getImage(this.getClass().getResource("/assets/BolaFuego.png"));
-        cofreImagen = h.getImage(this.getClass().getResource("/assets/cofre.png"));
+        bolaFuego = h.getImage(this.getClass().getResource(pelota.getImagen()));
+        cofreImagen = h.getImage(this.getClass().getResource(cofre.getImagen()));
         bi = new BufferedImage(AnchoVentana, AltoVentana, BufferedImage.TYPE_INT_RGB);
         //img = h.getImage(this.getClass().getResource(personaje.getDerecha()));
         
@@ -207,6 +209,7 @@ public class recreacion extends JPanel {
                                     clonarVida.vidaEscudo();
                                 }
                                 Personaje personajeClonUno = (Personaje) personajetemp.get(i).clonar();
+                                rectanguloPersonajes.add(rectPjDos);
                                 arreglo_personajes.add(personajeClonUno);
                             }
                         }
@@ -310,13 +313,13 @@ public class recreacion extends JPanel {
                 mxA = (Incremento % personajetemp.get(i).getNumSpritesMov()) * personajetemp.get(i).getSpriteMoverX();
                 myA = (Incremento / personajetemp.get(i).getNumSpritesMov()) * personajetemp.get(i).getSpriteMoverY();
                 g2d.drawImage(img, incx - 25, incy - 25 + y, 50 + incx, y + 50 + incy, mxA, myA, mxA + personajetemp.get(i).getSpriteMoverX(), myA + personajetemp.get(i).getSpriteMoverY(), this);
-                rectPj.setRect(incx-15, incy-30+y, 52, 78);
+                rectanguloPersonajes.get(i).setRect(incx-15, incy-30+y, 52, 78);
+                //rectPj.setRect(incx-15, incy-30+y, 52, 78);
                 rect.setRect(pocima.getCoordenadaX()+13, pocima.getCoordenadaY()+23, 30, 20);
-                
+                g2d.draw(rectanguloPersonajes.get(i));
                 /*Se evalua la colision de cada personaje mediante la clase EvaluarColisiones
                 y si es el caso se decora el personaje*/
                 colision = evaluarColisiones.evaluarColisionPocima(rect,rectPj,pocima, aumentoPorPocima, personajetemp.get(i));
-                
                 if (colision == true) {
                     
                     if (entra == true) {
@@ -324,9 +327,7 @@ public class recreacion extends JPanel {
                     }
                     entra = false;
                 }
-                
             }
-
             g2d.setFont(fuenteVida);//Fuente del porcentaje de vida
             g2d.setColor(Color.RED);//Color de la vida
             g2d.drawString(String.valueOf(personajetemp.get(i).getVida()) + "%", incx , incy - 30 + y);//Pinta el porcentaje de vida que tiene
@@ -350,11 +351,21 @@ public class recreacion extends JPanel {
         g.draw(pelotaCuatro.getPelota());
     }
     public void actualizar(){
-        pelota.mover(getBounds(),colision(rectPj, pelota),personaje);
-        pelotaUno.mover(getBounds(),colision(rectPj, pelotaUno),personaje);
-        pelotaDos.mover(getBounds(),colision(rectPj, pelotaDos),personaje);
-        pelotaTres.mover(getBounds(),colision(rectPj, pelotaTres),personaje);
-        pelotaCuatro.mover(getBounds(),colision(rectPj, pelotaCuatro),personaje);
+        if(rectanguloPersonajes.size()>1){
+            pelota.moverDos(getBounds(), colision(rectanguloPersonajes.get(0),pelota),colision(rectanguloPersonajes.get(1),pelota),arreglo_personajes.get(0),arreglo_personajes.get(1));
+            pelotaUno.moverDos(getBounds(), colision(rectanguloPersonajes.get(0),pelota),colision(rectanguloPersonajes.get(1),pelota),arreglo_personajes.get(0),arreglo_personajes.get(1));
+            pelotaDos.moverDos(getBounds(), colision(rectanguloPersonajes.get(0),pelota),colision(rectanguloPersonajes.get(1),pelota),arreglo_personajes.get(0),arreglo_personajes.get(1));
+            pelotaTres.moverDos(getBounds(), colision(rectanguloPersonajes.get(0),pelota),colision(rectanguloPersonajes.get(1),pelota),arreglo_personajes.get(0),arreglo_personajes.get(1));
+            pelotaCuatro.moverDos(getBounds(), colision(rectanguloPersonajes.get(0),pelota),colision(rectanguloPersonajes.get(1),pelota),arreglo_personajes.get(0),arreglo_personajes.get(1));
+        }else{
+            pelota.mover(getBounds(), colision(rectPj, pelota), personaje);
+            pelotaUno.mover(getBounds(), colision(rectPj, pelotaUno), personaje);
+            pelotaDos.mover(getBounds(), colision(rectPj, pelotaDos), personaje);
+            pelotaTres.mover(getBounds(), colision(rectPj, pelotaTres), personaje);
+            pelotaCuatro.mover(getBounds(), colision(rectPj, pelotaCuatro), personaje);
+        }
+
+
     }
     private boolean colision(Rectangle2D r, Bola pelota){
         return pelota.getPelota().intersects(r);
@@ -379,13 +390,13 @@ public class recreacion extends JPanel {
         animar.moverse();
         personaje = animar.getPersonaje();
         arreglo_personajes.add(personaje);
+        rectanguloPersonajes.add(rectPj);
         if (poblacion.equals("Población")) {
             Personaje personajeClonUno = (Personaje) personaje.clonar();
             Personaje personajeClonDos = (Personaje) personaje.clonar();
             arreglo_personajes.add(personajeClonUno);
             arreglo_personajes.add(personajeClonDos);
         }
-        
         new recreacion().setVisible(true);
     }
 }

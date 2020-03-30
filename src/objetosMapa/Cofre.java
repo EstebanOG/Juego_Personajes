@@ -3,7 +3,7 @@ package objetosMapa;
 import observer.colisionCofre;
 
 public class Cofre implements colisionCofre{
-    private String imagen = "/assets/Pocion2.png";
+    private String imagen = "/assets/cofre.png";
     private int coordenadaX = 0;
     private int coordenadaY = 300;
     private int posicion = 1;

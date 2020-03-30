@@ -44,7 +44,7 @@ public class Bola {
     public void mover(Rectangle limites, boolean colision, Personaje personaje){
         x += dx;
         y += dy;
-        limites.setSize(900, 700);
+        limites.setSize(857, 620);
         if(colision==true){
             x = 0;
             y = (int)(Math.random()*600);
@@ -83,8 +83,7 @@ public class Bola {
             } else {
                 personaje.setEscudo(personaje.getEscudo() - 20);
             }
-        }
-        if (colisionDos == true){
+        }else if (colisionDos == true){
             x = 0;
             y = (int) (Math.random() * 600);
             if (personajeDos.getEscudo() == 0) {
@@ -94,7 +93,9 @@ public class Bola {
             } else {
                 personajeDos.setEscudo(personajeDos.getEscudo() - 20);
             }
-        }
+        }else{
+                
+                }
         if (x > limites.getMaxX()) {
             dx = -dx;
         }

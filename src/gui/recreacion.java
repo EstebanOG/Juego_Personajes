@@ -79,6 +79,7 @@ public class recreacion extends JPanel {
     Bola pelotaTres = new Bola(600,10);
     Bola pelotaCuatro = new Bola(10,320);
     RectPersonaje personajeOriginal = new RectPersonaje(340,230);
+    Rectangle ataque = new Rectangle(300, 230, 52, 80);
     
     boolean entra = true;
 
@@ -215,7 +216,6 @@ public class recreacion extends JPanel {
         int mxA, myA, y = 0, aumentoSpriteY;
         g2d = bi.createGraphics();
         g2d.drawImage(fondo, 0, 0, AnchoVentana, AltoVentana, this);
-        System.out.println(pelota.getX());
         g2d.drawImage(bolaFuego, pelota.getX()-5, pelota.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaUno.getX()-5, pelotaUno.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaDos.getX()-5, pelotaDos.getY()-5, 60,60,this);
@@ -255,21 +255,29 @@ public class recreacion extends JPanel {
                         mxA = (Incremento % personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaArribaX();
                         myA = (Incremento / personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaArribaY();
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxArribaUno(), y + incy - personajetemp.get(i).getIncyArribaUno(), personajetemp.get(i).getIncxArribaDos() + incx, personajetemp.get(i).getIncyArribaDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaArribaX(), myA + personajetemp.get(i).getSpriteAtacaArribaY(), this);
+                        ataque.setRect(incx,incy-30,23,50);
+                        g2d.draw(ataque);
                         break;
                     case "abajo":
                         mxA = (Incremento % personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaAbajoX();
                         myA = (Incremento / personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaAbajoY();
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxAbajoUno(), y + incy - personajetemp.get(i).getIncyAbajoUno(), personajetemp.get(i).getIncxAbajoDos() + incx, personajetemp.get(i).getIncyAbajoDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaAbajoX(), myA + personajetemp.get(i).getSpriteAtacaAbajoY(), this);
+                        ataque.setRect(incx,incy+10,23,50);
+                        g2d.draw(ataque);
                         break;
                     case "derecha":
                         mxA = (Incremento % personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaDerechaX();
                         myA = (Incremento / personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaDerechaY();
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxDerechaUno(), y + incy - personajetemp.get(i).getIncyDerechaUno(), personajetemp.get(i).getIncxDerechaDos() + incx, personajetemp.get(i).getIncyDerechaDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaDerechaX(), myA + personajetemp.get(i).getSpriteAtacaDerechaY(), this);
+                        ataque.setRect(incx+15,incy+10,50,23);
+                        g2d.draw(ataque);
                         break;
                     case "izquierda":
                         mxA = (Incremento % personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaIzquierdaX();
                         myA = (Incremento / personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaIzquierdaY();
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxIzquierdaUno(), y + incy - personajetemp.get(i).getIncyIzquierdaUno(), personajetemp.get(i).getIncxIzquierdaDos() + incx, personajetemp.get(i).getIncyIzquierdaDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaIzquierdaX(), myA + personajetemp.get(i).getSpriteAtacaIzquierdaY(), this);
+                        ataque.setRect(incx-35,incy+10,50,23);
+                        g2d.draw(ataque);
                         break;
                 }
             } else {
@@ -286,7 +294,7 @@ public class recreacion extends JPanel {
                 if (colision == true) {
                     
                     if (entra == true) {
-                        personaje = evaluarColisiones.personajeDecorado(personaje);
+                       // personaje = evaluarColisiones.personajeDecorado(personaje);
                     }
                     entra = false;
                 }
@@ -316,11 +324,11 @@ public class recreacion extends JPanel {
 //        g.fill(pelotaCuatro.getPelota());
     }
     public void actualizar(){
-        pelota.mover(getBounds(),colision(rectPj, pelota));
-        pelotaUno.mover(getBounds(),colision(rectPj, pelotaUno));
-        pelotaDos.mover(getBounds(),colision(rectPj, pelotaDos));
-        pelotaTres.mover(getBounds(),colision(rectPj, pelotaTres));
-        pelotaCuatro.mover(getBounds(),colision(rectPj, pelotaCuatro));
+        pelota.mover(getBounds(),colision(rectPj, pelota),personaje);
+        pelotaUno.mover(getBounds(),colision(rectPj, pelotaUno),personaje);
+        pelotaDos.mover(getBounds(),colision(rectPj, pelotaDos),personaje);
+        pelotaTres.mover(getBounds(),colision(rectPj, pelotaTres),personaje);
+        pelotaCuatro.mover(getBounds(),colision(rectPj, pelotaCuatro),personaje);
     }
     private boolean colision(Rectangle2D r, Bola pelota){
         return pelota.getPelota().intersects(r);

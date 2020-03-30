@@ -15,17 +15,21 @@ public class EvaluarColisiones {
     public Rectangle rect;
     public Rectangle rectPj;
     public boolean colision;
-    public Personaje personaje;
+    private Personaje personaje;
     public Verificar verificar;
+    private int i = 1;
 
     public EvaluarColisiones() {
     }
 
     public boolean evaluarColisionPocima(Rectangle rect, Rectangle rectPj,  Pocima pocima, Verificar aumentoPorPocima, Personaje personaje){
         colision = rect.intersects(rectPj);
-        if(colision == true){
+        if(colision){
+            if((i%2)!=0){
             //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
             aumentoPorPocima.operacion(personaje.getVida(), personaje.getEscudo(), personaje);
+            }
+            i+=1;
             AlarmaColisionPocima a = new AlarmaColisionPocima();
             a.attach(pocima);
             a.notifyObserver();

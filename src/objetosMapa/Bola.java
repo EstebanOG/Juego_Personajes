@@ -1,5 +1,6 @@
 package objetosMapa;
 
+import animacion.Personaje;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
@@ -35,12 +36,19 @@ public class Bola {
         this.y = y;
     }
     
-    public void mover(Rectangle limites, boolean colision){
+    public void mover(Rectangle limites, boolean colision, Personaje personaje){
         x += dx;
         y += dy;
         if(colision==true){
             x = 0;
             y = (int)(Math.random()*600);
+            if(personaje.getEscudo()==0)
+                personaje.setVida(personaje.getVida()-20);
+            else if(personaje.getEscudo()<=20){
+                personaje.setEscudo(0);
+            }else{
+                personaje.setEscudo(personaje.getEscudo()-20);
+            }
         }
         if(x>limites.getMaxX()){
             dx = -dx;

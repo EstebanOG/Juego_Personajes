@@ -177,6 +177,9 @@ public class gui extends javax.swing.JFrame {
         recreacion.eleccion = this.seleccion;
         recreacion.poblacion = this.cantidadPersonajes;
         recreacion.inicia();
+//        if(recreacion.fin==true){
+//            ventana.setVisible(false);
+//        }
     }//GEN-LAST:event_botonCrearActionPerformed
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed

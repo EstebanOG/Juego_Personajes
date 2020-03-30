@@ -15,6 +15,8 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -88,7 +90,7 @@ public class recreacion extends JPanel {
     RectPersonaje personajeOriginal = new RectPersonaje(340,230);
     Rectangle ataque = new Rectangle(300, 230, 52, 80);
     String Puntaje;
-    boolean fin = false;
+    static boolean fin = false;
     boolean entra = true;
     int vida=0;
     public recreacion() {
@@ -221,17 +223,24 @@ public class recreacion extends JPanel {
         setFocusable(true);
     }
     @Override
+
     public void paint(Graphics g) {
         g.drawImage(bi, 0, 0, null);
         int mxA, myA, y = 0, aumentoSpriteY;
-        vida = personajetemp.get(1).getVida();
+        vida = arreglo_personajes.get(0).getVida();
         Puntaje = Integer.toString(evaluarColisiones.Score);
+        if(vida<1){
+            JOptionPane.showMessageDialog(null,"Fin del juego");
+            
+            System.exit(0);
+        }
+        
         System.out.println(Puntaje);
         g2d = bi.createGraphics();
         g2d.drawImage(fondo, 0, 0, AnchoVentana, AltoVentana, this);
         g2d.setFont(fuentePuntaje);//Fuente del puntaje
         g2d.setColor(Color.BLACK);//Color del puntaje
-        g2d.drawString(String.valueOf("Puntaje: " + Puntaje), 750, 50);//Pinta puntaje
+        g2d.drawString(String.valueOf("Puntaje: " + Puntaje), 859, 50);//Pinta puntaje
         g2d.drawImage(bolaFuego, pelota.getX()-5, pelota.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaUno.getX()-5, pelotaUno.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaDos.getX()-5, pelotaDos.getY()-5, 60,60,this);
@@ -337,12 +346,13 @@ public class recreacion extends JPanel {
             y = y + aumentoSpriteY;
         }
         personajetemp.clear();
-        repaint();
-        if(vida<=1){
-            JOptionPane.showMessageDialog(null,"FIN DEL JUEGO");
+        
+        
+           repaint(); 
             
-        }
+                    
     }
+
     public void dibujar(Graphics2D g){
         g.draw(pelota.getPelota());
         g.draw(pelotaUno.getPelota());

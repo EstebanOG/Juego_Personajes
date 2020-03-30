@@ -42,7 +42,6 @@ public class EvaluarColisiones {
     }
     public void evaluarColisionCofre(Rectangle rectCofre, Rectangle ataque, Cofre cofre){
         colisionCofre = ataque.intersects(rectCofre);
-        System.out.println(colisionCofre);
         if(colisionCofre){
             AlarmaColisionCofre b = new AlarmaColisionCofre();
             b.attach(cofre);

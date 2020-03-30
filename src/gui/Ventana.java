@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import objetosMapa.Hilo;
 
 public class Ventana extends JFrame{
-    private final int AnchoVentana = 900;
+    private final int AnchoVentana = 1200;
     private final int AltoVentana = 700;
     private recreacion lamina;
     private Hilo hilo;

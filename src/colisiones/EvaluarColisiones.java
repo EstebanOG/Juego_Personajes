@@ -8,13 +8,17 @@ import decorator.HumanoDecorator;
 import decorator.OrcoDecorator;
 import static gui.recreacion.eleccion;
 import java.awt.Rectangle;
+import objetosMapa.Cofre;
 import observer.AlarmaColisionPocima;
 import objetosMapa.Pocima;
+import observer.AlarmaColisionCofre;
 
 public class EvaluarColisiones {
     public Rectangle rect;
     public Rectangle rectPj;
-    public boolean colision;
+    public Rectangle rectCofre;
+    public Rectangle ataque;
+    public boolean colision, colisionCofre;
     private Personaje personaje;
     public Verificar verificar;
     private int i = 1;
@@ -36,8 +40,16 @@ public class EvaluarColisiones {
         }
         return colision;
     }
-    public void evaluarColisionBolas(){
-        
+    public void evaluarColisionCofre(Rectangle rectCofre, Rectangle ataque, Cofre cofre){
+        colisionCofre = ataque.intersects(rectCofre);
+        System.out.println(colisionCofre);
+        if(colisionCofre){
+                    
+
+            AlarmaColisionCofre b = new AlarmaColisionCofre();
+            b.attach(cofre);
+            b.notifyObserver();
+        }
     }
     
     public Personaje personajeDecorado(Personaje personaje){

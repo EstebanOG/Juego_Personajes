@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import objetosMapa.Hilo;
 import objetosMapa.Bola;
+import objetosMapa.Cofre;
 import observer.AlarmaColisionPocima;
 import objetosMapa.Pocima;
 import objetosMapa.RectPersonaje;
@@ -43,6 +44,7 @@ public class recreacion extends JPanel {
     /*******************************************************************************************/
     EvaluarColisiones evaluarColisiones = new EvaluarColisiones();
     Pocima pocima = new Pocima();
+    Cofre cofre = new Cofre();
     Font fuenteVida = new Font("Calibri", 3, 16);// Fuente vida
     Font fuenteEscudo = new Font("Calibri", 3, 16);// Fuente escudo
     static ArrayList<Personaje> personajetemp = new ArrayList<>();
@@ -73,6 +75,7 @@ public class recreacion extends JPanel {
     boolean colisionPocima = false;
     Rectangle rect = new Rectangle(700, 500, 30, 20);
     Rectangle rectPj = new Rectangle(340, 230, 52, 80);
+    Rectangle rectCofre = new Rectangle(10, 360, 50, 50);
     Bola pelota = new Bola(0,0);
     Bola pelotaUno = new Bola(10,600);
     Bola pelotaDos = new Bola(300,10);
@@ -222,6 +225,8 @@ public class recreacion extends JPanel {
         g2d.drawImage(bolaFuego, pelotaTres.getX()-5, pelotaTres.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaCuatro.getX()-5, pelotaCuatro.getY()-5, 60,60,this);
         g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
+//        g2d.drawRect(cofre.getCoordenadaX(), cofre.getCoordenadaY(), cofre.getAlto(), cofre.getAncho());
+        g2d.draw(rectCofre);
         g2d.setColor(Color.red);
         dibujar(g2d);
         actualizar();
@@ -278,6 +283,9 @@ public class recreacion extends JPanel {
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxIzquierdaUno(), y + incy - personajetemp.get(i).getIncyIzquierdaUno(), personajetemp.get(i).getIncxIzquierdaDos() + incx, personajetemp.get(i).getIncyIzquierdaDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaIzquierdaX(), myA + personajetemp.get(i).getSpriteAtacaIzquierdaY(), this);
                         ataque.setRect(incx-35,incy+10,50,23);
                         g2d.draw(ataque);
+                        
+                        evaluarColisiones.evaluarColisionCofre(rectCofre, ataque, cofre);
+                        rectCofre.setRect(cofre.getCoordenadaX(),cofre.getCoordenadaY(),cofre.getAlto(),cofre.getAncho());
                         break;
                 }
             } else {

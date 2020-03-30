@@ -52,7 +52,7 @@ public class recreacion extends JPanel {
     //Thread hilo;
     boolean inicio = false;
     BufferedImage bi;
-    Image img, fondo, pocion, bolaFuego;
+    Image img, fondo, pocion, bolaFuego,cofre;
     Toolkit h = Toolkit.getDefaultToolkit();
     Graphics2D g2d;
     int Incremento = 0;
@@ -87,7 +87,7 @@ public class recreacion extends JPanel {
         fondo = h.getImage(this.getClass().getResource("/assets/map.png"));
         pocion = h.getImage(this.getClass().getResource(pocima.getImagen()));
         bolaFuego = h.getImage(this.getClass().getResource("/assets/BolaFuego.png"));
-        
+        cofre = h.getImage(this.getClass().getResource("/assets/cofre.png"));
         bi = new BufferedImage(AnchoVentana, AltoVentana, BufferedImage.TYPE_INT_RGB);
         //img = h.getImage(this.getClass().getResource(personaje.getDerecha()));
         inicio = true;
@@ -222,6 +222,8 @@ public class recreacion extends JPanel {
         g2d.drawImage(bolaFuego, pelotaTres.getX()-5, pelotaTres.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaCuatro.getX()-5, pelotaCuatro.getY()-5, 60,60,this);
         g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
+        g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
+        g2d.drawImage(cofre, 400, 300, 50, 50, this);
         g2d.setColor(Color.red);
         dibujar(g2d);
         actualizar();

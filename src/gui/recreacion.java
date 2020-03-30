@@ -16,6 +16,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import objetosMapa.Hilo;
 import objetosMapa.Bola;
@@ -47,6 +48,7 @@ public class recreacion extends JPanel {
     Cofre cofre = new Cofre();
     Font fuenteVida = new Font("Calibri", 3, 16);// Fuente vida
     Font fuenteEscudo = new Font("Calibri", 3, 16);// Fuente escudo
+    Font fuentePuntaje = new Font("Arial", 3, 19);//Fuente puntaje
     static ArrayList<Personaje> personajetemp = new ArrayList<>();
     static ArrayList<Object> arreglo_personajes = new ArrayList<>();
     private final int AnchoVentana = 900;
@@ -83,9 +85,10 @@ public class recreacion extends JPanel {
     Bola pelotaCuatro = new Bola(10,320);
     RectPersonaje personajeOriginal = new RectPersonaje(340,230);
     Rectangle ataque = new Rectangle(300, 230, 52, 80);
-    
+    String Puntaje;
+    boolean fin = false;
     boolean entra = true;
-
+    int vida=0;
     public recreacion() {
         fondo = h.getImage(this.getClass().getResource("/assets/map.png"));
         pocion = h.getImage(this.getClass().getResource(pocima.getImagen()));
@@ -93,6 +96,7 @@ public class recreacion extends JPanel {
         cofreImagen = h.getImage(this.getClass().getResource("/assets/cofre.png"));
         bi = new BufferedImage(AnchoVentana, AltoVentana, BufferedImage.TYPE_INT_RGB);
         //img = h.getImage(this.getClass().getResource(personaje.getDerecha()));
+        
         inicio = true;
         addKeyListener(new KeyAdapter() {
             @Override
@@ -217,8 +221,14 @@ public class recreacion extends JPanel {
     public void paint(Graphics g) {
         g.drawImage(bi, 0, 0, null);
         int mxA, myA, y = 0, aumentoSpriteY;
+        vida = personajetemp.get(1).getVida();
+        Puntaje = Integer.toString(evaluarColisiones.Score);
+        System.out.println(Puntaje);
         g2d = bi.createGraphics();
         g2d.drawImage(fondo, 0, 0, AnchoVentana, AltoVentana, this);
+        g2d.setFont(fuentePuntaje);//Fuente del puntaje
+        g2d.setColor(Color.BLACK);//Color del puntaje
+        g2d.drawString(String.valueOf("Puntaje: " + Puntaje), 750, 50);//Pinta puntaje
         g2d.drawImage(bolaFuego, pelota.getX()-5, pelota.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaUno.getX()-5, pelotaUno.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaDos.getX()-5, pelotaDos.getY()-5, 60,60,this);
@@ -327,6 +337,10 @@ public class recreacion extends JPanel {
         }
         personajetemp.clear();
         repaint();
+        if(vida<=1){
+            JOptionPane.showMessageDialog(null,"FIN DEL JUEGO");
+            
+        }
     }
     public void dibujar(Graphics2D g){
         g.draw(pelota.getPelota());

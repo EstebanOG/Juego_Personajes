@@ -22,6 +22,7 @@ public class EvaluarColisiones {
     private Personaje personaje;
     public Verificar verificar;
     private int i = 1;
+    public int Score=0;
 
     public EvaluarColisiones() {
     }
@@ -37,6 +38,7 @@ public class EvaluarColisiones {
             AlarmaColisionPocima a = new AlarmaColisionPocima();
             a.attach(pocima);
             a.notifyObserver();
+            
         }
         return colision;
     }
@@ -47,6 +49,7 @@ public class EvaluarColisiones {
             AlarmaColisionCofre b = new AlarmaColisionCofre();
             b.attach(cofre);
             b.notifyObserver();
+            Score++;
         }
     }
     

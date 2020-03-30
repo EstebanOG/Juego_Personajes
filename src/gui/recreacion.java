@@ -18,9 +18,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import objetosMapa.Hilo;
-import objetosMapa.Pelota;
+import objetosMapa.Bola;
 import observer.AlarmaColisionPocima;
 import objetosMapa.Pocima;
+import objetosMapa.RectPersonaje;
 import state.EstadoPersonaje;
 import state.Herido;
 import state.Moribundo;
@@ -51,7 +52,7 @@ public class recreacion extends JPanel {
     //Thread hilo;
     boolean inicio = false;
     BufferedImage bi;
-    Image img, fondo, pocion;
+    Image img, fondo, pocion, bolaFuego;
     Toolkit h = Toolkit.getDefaultToolkit();
     Graphics2D g2d;
     int Incremento = 0;
@@ -72,16 +73,19 @@ public class recreacion extends JPanel {
     boolean colisionPocima = false;
     Rectangle rect = new Rectangle(700, 500, 30, 20);
     Rectangle rectPj = new Rectangle(340, 230, 52, 80);
-    Pelota pelota = new Pelota(0,0);
-    Pelota pelotaUno = new Pelota(10,600);
-    Pelota pelotaDos = new Pelota(300,10);
-    Pelota pelotaTres = new Pelota(600,10);
-    Pelota pelotaCuatro = new Pelota(10,320);
+    Bola pelota = new Bola(0,0);
+    Bola pelotaUno = new Bola(10,600);
+    Bola pelotaDos = new Bola(300,10);
+    Bola pelotaTres = new Bola(600,10);
+    Bola pelotaCuatro = new Bola(10,320);
+    RectPersonaje personajeOriginal = new RectPersonaje(340,230);
+    
     boolean entra = true;
 
     public recreacion() {
         fondo = h.getImage(this.getClass().getResource("/assets/map.png"));
         pocion = h.getImage(this.getClass().getResource(pocima.getImagen()));
+        bolaFuego = h.getImage(this.getClass().getResource("/assets/BolaFuego.png"));
         
         bi = new BufferedImage(AnchoVentana, AltoVentana, BufferedImage.TYPE_INT_RGB);
         //img = h.getImage(this.getClass().getResource(personaje.getDerecha()));
@@ -208,12 +212,15 @@ public class recreacion extends JPanel {
     @Override
     public void paint(Graphics g) {
         g.drawImage(bi, 0, 0, null);
-        int mxA;
-        int myA;
-        int y = 0;
-        int aumentoSpriteY;
+        int mxA, myA, y = 0, aumentoSpriteY;
         g2d = bi.createGraphics();
         g2d.drawImage(fondo, 0, 0, AnchoVentana, AltoVentana, this);
+        System.out.println(pelota.getX());
+        g2d.drawImage(bolaFuego, pelota.getX()-5, pelota.getY()-5, 60,60,this);
+        g2d.drawImage(bolaFuego, pelotaUno.getX()-5, pelotaUno.getY()-5, 60,60,this);
+        g2d.drawImage(bolaFuego, pelotaDos.getX()-5, pelotaDos.getY()-5, 60,60,this);
+        g2d.drawImage(bolaFuego, pelotaTres.getX()-5, pelotaTres.getY()-5, 60,60,this);
+        g2d.drawImage(bolaFuego, pelotaCuatro.getX()-5, pelotaCuatro.getY()-5, 60,60,this);
         g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
         g2d.setColor(Color.red);
         dibujar(g2d);
@@ -224,6 +231,7 @@ public class recreacion extends JPanel {
             aumentoSpriteY = 110;
         }
         for (i = 0; i < arreglo_personajes.size(); i++) {
+           
             personajetemp.add((Personaje) arreglo_personajes.get(i));
             /*Se verifica el estado del personaje y cambia su daño así:
             Vigoroso(70 puntos de vida o más): Daño 50
@@ -270,9 +278,11 @@ public class recreacion extends JPanel {
                 g2d.drawImage(img, incx - 25, incy - 25 + y, 50 + incx, y + 50 + incy, mxA, myA, mxA + personajetemp.get(i).getSpriteMoverX(), myA + personajetemp.get(i).getSpriteMoverY(), this);
                 rectPj.setRect(incx-15, incy-30+y, 52, 78);
                 rect.setRect(pocima.getCoordenadaX()+13, pocima.getCoordenadaY()+23, 30, 20);
+                
                 /*Se evalua la colision de cada personaje mediante la clase EvaluarColisiones
                 y si es el caso se decora el personaje*/
                 colision = evaluarColisiones.evaluarColisionPocima(rect,rectPj,pocima, aumentoPorPocima, personajetemp.get(i));
+                
                 if (colision == true) {
                     
                     if (entra == true) {
@@ -282,6 +292,7 @@ public class recreacion extends JPanel {
                 }
                 
             }
+
             g2d.setFont(fuenteVida);//Fuente del porcentaje de vida
             g2d.setColor(Color.RED);//Color de la vida
             g2d.drawString(String.valueOf(personajetemp.get(i).getVida()) + "%", incx , incy - 30 + y);//Pinta el porcentaje de vida que tiene
@@ -294,11 +305,15 @@ public class recreacion extends JPanel {
         repaint();
     }
     public void dibujar(Graphics2D g){
-        g.fill(pelota.getPelota());
-        g.fill(pelotaUno.getPelota());
-        g.fill(pelotaDos.getPelota());
-        g.fill(pelotaTres.getPelota());
-        g.fill(pelotaCuatro.getPelota());
+        g.draw(pelota.getPelota());
+        g.draw(pelotaUno.getPelota());
+        g.draw(pelotaDos.getPelota());
+        g.draw(pelotaTres.getPelota());
+        g.draw(pelotaCuatro.getPelota());
+//        g.fill(pelotaUno.getPelota());
+//        g.fill(pelotaDos.getPelota());
+//        g.fill(pelotaTres.getPelota());
+//        g.fill(pelotaCuatro.getPelota());
     }
     public void actualizar(){
         pelota.mover(getBounds(),colision(rectPj, pelota));
@@ -307,7 +322,7 @@ public class recreacion extends JPanel {
         pelotaTres.mover(getBounds(),colision(rectPj, pelotaTres));
         pelotaCuatro.mover(getBounds(),colision(rectPj, pelotaCuatro));
     }
-    private boolean colision(Rectangle2D r, Pelota pelota){
+    private boolean colision(Rectangle2D r, Bola pelota){
         return pelota.getPelota().intersects(r);
     }
     public static void inicia() {

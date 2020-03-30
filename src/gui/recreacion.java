@@ -54,7 +54,7 @@ public class recreacion extends JPanel {
     //Thread hilo;
     boolean inicio = false;
     BufferedImage bi;
-    Image img, fondo, pocion, bolaFuego,cofre;
+    Image img, fondo, pocion, bolaFuego,cofreImagen;
     Toolkit h = Toolkit.getDefaultToolkit();
     Graphics2D g2d;
     int Incremento = 0;
@@ -75,7 +75,7 @@ public class recreacion extends JPanel {
     boolean colisionPocima = false;
     Rectangle rect = new Rectangle(700, 500, 30, 20);
     Rectangle rectPj = new Rectangle(340, 230, 52, 80);
-    Rectangle rectCofre = new Rectangle(10, 360, 50, 50);
+    Rectangle rectCofre = new Rectangle(0, 300, 60, 60);
     Bola pelota = new Bola(0,0);
     Bola pelotaUno = new Bola(10,600);
     Bola pelotaDos = new Bola(300,10);
@@ -90,7 +90,7 @@ public class recreacion extends JPanel {
         fondo = h.getImage(this.getClass().getResource("/assets/map.png"));
         pocion = h.getImage(this.getClass().getResource(pocima.getImagen()));
         bolaFuego = h.getImage(this.getClass().getResource("/assets/BolaFuego.png"));
-        cofre = h.getImage(this.getClass().getResource("/assets/cofre.png"));
+        cofreImagen = h.getImage(this.getClass().getResource("/assets/cofre.png"));
         bi = new BufferedImage(AnchoVentana, AltoVentana, BufferedImage.TYPE_INT_RGB);
         //img = h.getImage(this.getClass().getResource(personaje.getDerecha()));
         inicio = true;
@@ -225,13 +225,11 @@ public class recreacion extends JPanel {
         g2d.drawImage(bolaFuego, pelotaTres.getX()-5, pelotaTres.getY()-5, 60,60,this);
         g2d.drawImage(bolaFuego, pelotaCuatro.getX()-5, pelotaCuatro.getY()-5, 60,60,this);
         g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
-<<<<<<< HEAD
+
 //        g2d.drawRect(cofre.getCoordenadaX(), cofre.getCoordenadaY(), cofre.getAlto(), cofre.getAncho());
         g2d.draw(rectCofre);
-=======
-        g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
-        g2d.drawImage(cofre, 400, 300, 50, 50, this);
->>>>>>> a7babd9ad47247410048038f2da43d5d42cf13c9
+        //g2d.drawImage(pocion, pocima.getCoordenadaX(), pocima.getCoordenadaY(), pocima.getAlto(), pocima.getAncho(), this);
+        g2d.drawImage(cofreImagen, cofre.getCoordenadaX(), cofre.getCoordenadaY(), cofre.getAlto(),cofre.getAncho(), this);
         g2d.setColor(Color.red);
         dibujar(g2d);
         actualizar();
@@ -267,6 +265,8 @@ public class recreacion extends JPanel {
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxArribaUno(), y + incy - personajetemp.get(i).getIncyArribaUno(), personajetemp.get(i).getIncxArribaDos() + incx, personajetemp.get(i).getIncyArribaDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaArribaX(), myA + personajetemp.get(i).getSpriteAtacaArribaY(), this);
                         ataque.setRect(incx,incy-30,23,50);
                         g2d.draw(ataque);
+                        evaluarColisiones.evaluarColisionCofre(rectCofre, ataque, cofre);
+                        rectCofre.setRect(cofre.getCoordenadaX(),cofre.getCoordenadaY(),cofre.getAlto(),cofre.getAncho());
                         break;
                     case "abajo":
                         mxA = (Incremento % personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaAbajoX();
@@ -274,6 +274,8 @@ public class recreacion extends JPanel {
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxAbajoUno(), y + incy - personajetemp.get(i).getIncyAbajoUno(), personajetemp.get(i).getIncxAbajoDos() + incx, personajetemp.get(i).getIncyAbajoDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaAbajoX(), myA + personajetemp.get(i).getSpriteAtacaAbajoY(), this);
                         ataque.setRect(incx,incy+10,23,50);
                         g2d.draw(ataque);
+                        evaluarColisiones.evaluarColisionCofre(rectCofre, ataque, cofre);
+                        rectCofre.setRect(cofre.getCoordenadaX(),cofre.getCoordenadaY(),cofre.getAlto(),cofre.getAncho());
                         break;
                     case "derecha":
                         mxA = (Incremento % personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaDerechaX();
@@ -281,6 +283,8 @@ public class recreacion extends JPanel {
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxDerechaUno(), y + incy - personajetemp.get(i).getIncyDerechaUno(), personajetemp.get(i).getIncxDerechaDos() + incx, personajetemp.get(i).getIncyDerechaDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaDerechaX(), myA + personajetemp.get(i).getSpriteAtacaDerechaY(), this);
                         ataque.setRect(incx+15,incy+10,50,23);
                         g2d.draw(ataque);
+                        evaluarColisiones.evaluarColisionCofre(rectCofre, ataque, cofre);
+                        rectCofre.setRect(cofre.getCoordenadaX(),cofre.getCoordenadaY(),cofre.getAlto(),cofre.getAncho());
                         break;
                     case "izquierda":
                         mxA = (Incremento % personajetemp.get(i).getNumSpritesAtaque()) * personajetemp.get(i).getSpriteAtacaIzquierdaX();
@@ -288,7 +292,6 @@ public class recreacion extends JPanel {
                         g2d.drawImage(img, incx - personajetemp.get(i).getIncxIzquierdaUno(), y + incy - personajetemp.get(i).getIncyIzquierdaUno(), personajetemp.get(i).getIncxIzquierdaDos() + incx, personajetemp.get(i).getIncyIzquierdaDos() + incy + y, mxA, myA, mxA + personajetemp.get(i).getSpriteAtacaIzquierdaX(), myA + personajetemp.get(i).getSpriteAtacaIzquierdaY(), this);
                         ataque.setRect(incx-35,incy+10,50,23);
                         g2d.draw(ataque);
-                        
                         evaluarColisiones.evaluarColisionCofre(rectCofre, ataque, cofre);
                         rectCofre.setRect(cofre.getCoordenadaX(),cofre.getCoordenadaY(),cofre.getAlto(),cofre.getAncho());
                         break;
@@ -331,10 +334,6 @@ public class recreacion extends JPanel {
         g.draw(pelotaDos.getPelota());
         g.draw(pelotaTres.getPelota());
         g.draw(pelotaCuatro.getPelota());
-//        g.fill(pelotaUno.getPelota());
-//        g.fill(pelotaDos.getPelota());
-//        g.fill(pelotaTres.getPelota());
-//        g.fill(pelotaCuatro.getPelota());
     }
     public void actualizar(){
         pelota.mover(getBounds(),colision(rectPj, pelota),personaje);

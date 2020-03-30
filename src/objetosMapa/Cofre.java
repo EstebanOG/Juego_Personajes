@@ -4,7 +4,7 @@ import observer.colisionCofre;
 
 public class Cofre implements colisionCofre{
     private String imagen = "/assets/Pocion2.png";
-    private int coordenadaX = 700;
+    private int coordenadaX = 0;
     private int coordenadaY = 300;
     private int posicion = 1;
     private final int ancho = 60;
@@ -34,13 +34,23 @@ public class Cofre implements colisionCofre{
     @Override
     public void update() {
         if (posicion == 1){
-            this.coordenadaY = 100;
-            this.coordenadaX = 100;
+            this.coordenadaX = 833;
+            this.coordenadaY = 300;
             this.posicion = 2;
+        }else if(posicion == 2){
+            this.coordenadaX = 410;
+            this.coordenadaY = 0;
+            this.posicion = 3;
+        }else if(posicion == 3){
+            this.coordenadaX = 410;
+            this.coordenadaY = 610;
+            this.posicion = 4;
         }else{
-            this.coordenadaY = 500;
-            this.coordenadaX = 700;
+            this.coordenadaX = 0;
+            this.coordenadaY = 330;
             this.posicion = 1;
-        }        
+        }
+            
+           
     }
 }
